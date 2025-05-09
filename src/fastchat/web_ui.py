@@ -3,6 +3,7 @@ import time
 import importlib
 import os
 import gradio as gr
+from src.config.settings import MENTAL_HEALTH_CATEGORIES, FASTCHAT_CONFIG
 
 def get_gradio_app_and_blocks():
     """Obtiene las funciones y clases necesarias de gradio y fastchat de manera dinámica"""
@@ -56,7 +57,7 @@ def custom_mental_health_ui():
                     pass
             
             # Intenta obtener categorías de entorno o usa valores predeterminados
-            categories = ["General", "Ansiedad", "Depresión", "Estrés", "Relaciones"]
+            categories = MENTAL_HEALTH_CATEGORIES if MENTAL_HEALTH_CATEGORIES else ["General", "Ansiedad", "Depresión", "Estrés", "Relaciones"]
             
             with gr.Row():
                 topic = gr.Radio(
@@ -86,7 +87,9 @@ def custom_mental_health_ui():
                     "Ansiedad": "Últimamente me siento ansioso. ¿Podrías ayudarme?",
                     "Depresión": "He estado sintiéndome sin energía y con poco interés en las cosas.",
                     "Estrés": "El estrés me está afectando mucho últimamente.",
-                    "Relaciones": "Estoy teniendo dificultades en mis relaciones personales."
+                    "Relaciones": "Estoy teniendo dificultades en mis relaciones personales.",
+                    "Autoestima": "He notado que tengo pensamientos muy negativos sobre mí mismo.",
+                    "Técnicas de relajación": "Me gustaría aprender algunas técnicas para relajarme."
                 }
                 
                 return prompts.get(category, f"Me gustaría hablar sobre {category.lower()}.")
@@ -118,9 +121,10 @@ def custom_mental_health_ui():
 
 def start_web_server():
     """Inicia el servidor web de Gradio"""
-    host = os.getenv("HOST", "0.0.0.0")
-    port = int(os.getenv("PORT", "7860"))
-    share = os.getenv("SHARE_GRADIO", "False").lower() == "true"
+    cfg = FASTCHAT_CONFIG["web_server"]
+    host = cfg.get("host", "0.0.0.0")
+    port = int(cfg.get("port", "7860"))
+    share = cfg.get("share", False)
     
     try:
         ui = custom_mental_health_ui()
@@ -156,5 +160,5 @@ def launch_web_server():
     web_thread = threading.Thread(target=start_web_server)
     web_thread.daemon = True
     web_thread.start()
-    print(f"✅ Interfaz web iniciándose en http://localhost:7860")
+    print(f"✅ Interfaz web iniciándose en http://localhost:{FASTCHAT_CONFIG['web_server'].get('port', 7860)}")
     return web_thread
