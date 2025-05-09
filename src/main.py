@@ -101,13 +101,14 @@ def main():
             print("   Ejecuta: pip install gradio")
             return False
             
-        # Importar módulos de FastChat usando las versiones alternativas
+        # Importar módulos de FastChat
         print("📦 Cargando componentes...")
         controller_module = import_module_safely("src.fastchat.controller")
         model_worker_module = import_module_safely("src.fastchat.model_worker")
         web_ui_module = import_module_safely("src.fastchat.web_ui")
+        api_server_module = import_module_safely("src.fastchat.api_server")
         
-        if not (controller_module and model_worker_module and web_ui_module):
+        if not (controller_module and model_worker_module and web_ui_module and api_server_module):
             print("❌ No se pudieron cargar todos los módulos necesarios.")
             return False
             
@@ -119,10 +120,14 @@ def main():
         worker_thread = model_worker_module.launch_worker()
         time.sleep(5)  # Esperar a que el worker se inicie
         
+        api_thread = api_server_module.launch_api_server()
+        time.sleep(1)  # Esperar a que el API se inicie
+        
         web_thread = web_ui_module.launch_web_server()
         
         print("✨ ¡Asistente iniciado correctamente!")
         print("💬 Interfaz web disponible en http://localhost:7860")
+        print("🔌 API REST disponible en http://localhost:8000")
         print("💡 Presiona Ctrl+C para detener el asistente")
         
         # Mantener el programa en ejecución
