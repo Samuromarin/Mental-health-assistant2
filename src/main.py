@@ -12,9 +12,9 @@ load_dotenv()
 
 from src.config.settings import OPENAI_API_KEY, FASTCHAT_CONFIG
 from src.fastchat.controller import launch_controller
-from src.fastchat.model_worker_alt import launch_worker
+from src.fastchat.model_worker import launch_worker
 from src.fastchat.api_server import launch_api_server
-from src.fastchat.web_ui_alt import launch_web_server
+from src.fastchat.web_ui import launch_web_server
 
 def import_module_safely(name):
     """Importa un módulo de forma segura, mostrando un error claro si falla"""
@@ -103,9 +103,9 @@ def main():
             
         # Importar módulos de FastChat usando las versiones alternativas
         print("📦 Cargando componentes...")
-        controller_module = import_module_safely("src.fastchat.controller_alt")
-        model_worker_module = import_module_safely("src.fastchat.model_worker_alt")
-        web_ui_module = import_module_safely("src.fastchat.web_ui_alt")
+        controller_module = import_module_safely("src.fastchat.controller")
+        model_worker_module = import_module_safely("src.fastchat.model_worker")
+        web_ui_module = import_module_safely("src.fastchat.web_ui")
         
         if not (controller_module and model_worker_module and web_ui_module):
             print("❌ No se pudieron cargar todos los módulos necesarios.")

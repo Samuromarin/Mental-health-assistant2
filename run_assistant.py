@@ -217,13 +217,13 @@ def main():
     
     print("\n🚀 Iniciando asistente de salud mental...")
     
-    # Ejecutar directamente el archivo main_alt.py
+    # Ejecutar directamente el archivo main.py
     try:
         # Importar módulos alternativos
         print("📦 Cargando componentes...")
-        controller_module = import_module_safely("src.fastchat.controller_alt")
-        model_worker_module = import_module_safely("src.fastchat.model_worker_alt")
-        web_ui_module = import_module_safely("src.fastchat.web_ui_alt")
+        controller_module = import_module_safely("src.fastchat.controller")
+        model_worker_module = import_module_safely("src.fastchat.model_worker")
+        web_ui_module = import_module_safely("src.fastchat.web_ui")
         
         if not (controller_module and model_worker_module and web_ui_module):
             print("❌ No se pudieron cargar todos los módulos necesarios.")
