@@ -2,6 +2,7 @@ import threading
 import time
 import os
 import importlib
+from src.config.settings import FASTCHAT_CONFIG
 
 def get_model_worker_class():
     """Obtiene la clase ModelWorker de fastchat de manera dinámica"""
@@ -27,19 +28,22 @@ def get_model_worker_class():
 
 def start_worker():
     """Inicia el trabajador del modelo de FastChat para Vicuna"""
+    # Obtener configuración desde settings
+    cfg = FASTCHAT_CONFIG["model_worker"]
+    
     # Configuración básica
-    model_path = os.getenv("MODEL_PATH", "lmsys/vicuna-7b-v1.5")
-    device = os.getenv("DEVICE", "cpu")
-    controller_addr = "http://localhost:21001"
-    worker_addr = "http://localhost:21002"
-    worker_id = "mental_health_worker"
+    model_path = cfg.get("model_path", os.getenv("MODEL_PATH", "lmsys/vicuna-7b-v1.5"))
+    device = cfg.get("device", os.getenv("DEVICE", "cpu"))
+    controller_addr = f"http://{FASTCHAT_CONFIG['controller']['host']}:{FASTCHAT_CONFIG['controller']['port']}"
+    worker_addr = f"http://{cfg.get('host', 'localhost')}:{cfg.get('port', 21002)}"
+    worker_id = cfg.get("worker_id", "mental_health_worker")
     
     # Configuración avanzada
-    load_8bit = os.getenv("LOAD_8BIT", "False").lower() == "true"
-    cpu_offloading = os.getenv("CPU_OFFLOADING", "False").lower() == "true"
+    load_8bit = cfg.get("load_8bit", False)
+    cpu_offloading = cfg.get("cpu_offloading", False)
     gpus = os.getenv("GPUS", "")
-    num_gpus = int(os.getenv("NUM_GPUS", "1"))
-    max_gpu_memory = os.getenv("MAX_GPU_MEMORY", None)
+    num_gpus = int(cfg.get("num_gpus", os.getenv("NUM_GPUS", "1")))
+    max_gpu_memory = cfg.get("max_gpu_memory", None)
     
     # Configurar GPUs visibles
     if gpus:
@@ -55,7 +59,7 @@ def start_worker():
             worker_addr=worker_addr,
             worker_id=worker_id,
             model_path=model_path,
-            model_names=["vicuna", "mental_health_assistant"],
+            model_names=cfg.get("model_names", ["vicuna", "mental_health_assistant"]),
             device=device,
             num_gpus=num_gpus,
             max_gpu_memory=max_gpu_memory,
@@ -76,5 +80,5 @@ def launch_worker():
     worker_thread.start()
     # Esperar a que el worker se inicie
     time.sleep(8)  # Vicuna puede tardar un poco en cargar
-    print(f"✅ Trabajador del modelo iniciado en localhost:21002")
+    print(f"✅ Trabajador del modelo iniciado en {FASTCHAT_CONFIG['model_worker'].get('host', 'localhost')}:{FASTCHAT_CONFIG['model_worker'].get('port', 21002)}")
     return worker_thread
