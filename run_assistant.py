@@ -219,7 +219,7 @@ def main():
     
     # Ejecutar directamente el archivo main.py
     try:
-        # Importar módulos alternativos
+        # Importar módulos
         print("📦 Cargando componentes...")
         controller_module = import_module_safely("src.fastchat.controller")
         model_worker_module = import_module_safely("src.fastchat.model_worker")
