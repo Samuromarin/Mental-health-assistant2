@@ -1,0 +1,89 @@
+# Entorno virtual
+venv/
+env/
+.env
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribución/empaquetado
+dist/
+build/
+*.egg-info/
+
+# Archivos de logs
+*.log
+
+# Entornos locales
+.env
+.env.local
+
+# Otros
+.DS_Store
+
+# Archivos de modelo
+models/
+downloaded_models/
+*.bin
+*.safetensors
+*.model
+*.pt
+*.pth
+
+# Archivos específicos de Vicuna
+*vicuna*7b*/
+*vicuna*13b*/
+pytorch_model*.bin
+model.safetensors
+adapter_*.safetensors
+
+# Archivos de LLMs y datos grandes
+*checkpoint*/
+*checkpoint-*/
+*.ckpt
+*weights*/
+*weight-*
+*.h5
+*.gguf
+*vicuna*/
+*llama*/
+*alpaca*/
+*llm*/
+*lora*/
+*ggml*/
+*gguf*/
+*transformers*/
+*.tar.gz
+*.tar
+*.zip
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.onnx
+
+# Archivos temporales
+*.swp
+*.swo
+*~
+.DS_Store
+.idea/
+.vscode/
+
+# Archivos de datos grandes
+*.csv
+*.tsv
+*.jsonl
+*.json
+*.parquet
+*.arrow
+
+# Salidas generadas
+outputs/
+runs/
+wandb/
+logs/
+tmp/
+temp/
